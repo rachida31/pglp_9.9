@@ -1,21 +1,34 @@
 package Dessin.TD_Dessin;
 
 public class Cercle extends Formes_Graphiques {
-
-	public Cercle(String name) {
+	private Coordonnee centre;
+	private int rayon;
+	public Cercle(String name,Coordonnee centre ,int rayon) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		this.centre=new Coordonnee(centre.getX(),centre.getY()) ;
+		this.rayon=rayon;
+	}
+
+	public Coordonnee getCentre()
+	{
+		return this.centre;
+	}
+	public int getRayon()
+	{
+		return this.rayon;
+	}
+	@Override
+	public void print() 
+	{
+		String cercle =  this.name + " : Cercle ((Rayon:" + rayon +") "
+				 + ("(x:"+centre.getX() + "," + "y:"+centre.getY())+"))";
+		System.out.println(cercle);
 	}
 
 	@Override
-	public void print() {
-		// TODO Auto-generated method stub
+	public void move()
+	{
 		
-	}
-
-	@Override
-	public void move() {
-		// TODO Auto-generated method stub
 		
 	}
 

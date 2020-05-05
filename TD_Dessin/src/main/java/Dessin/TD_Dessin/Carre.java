@@ -1,12 +1,21 @@
 package Dessin.TD_Dessin;
 
 public class Carre extends Formes_Graphiques {
-
-	public Carre(String name) {
+	private Coordonnee Coor;
+	private int cote;
+	public Carre(String name,Coordonnee Coor,int cote) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		this.Coor=new Coordonnee(Coor.getX(),Coor.getY());
+		this.cote=cote;
 	}
-
+	public Coordonnee getCoor()
+	{
+		return this.Coor;
+	}
+	public int getCote()
+	{
+		return this.cote;
+	}
 	@Override
 	public void print() {
 		// TODO Auto-generated method stub
