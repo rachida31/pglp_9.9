@@ -18,14 +18,14 @@ public class Carre extends Formes_Graphiques {
 	}
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-		
+		String carre =  this.name + " : carre ((coté:" + cote +") "
+				 + ("(x:"+Coor.getX() + "," + "y:"+Coor.getY())+"))";
+		System.out.println(carre);		
 	}
 
 	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-		
+	public void move(int x,int y) {
+		this.Coor.move(x, y);
 	}
 
 }

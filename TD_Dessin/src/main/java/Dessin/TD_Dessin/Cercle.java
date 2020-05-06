@@ -26,9 +26,9 @@ public class Cercle extends Formes_Graphiques {
 	}
 
 	@Override
-	public void move()
+	public void move(int x,int y)
 	{
-		
+		this.centre.move(x, y);
 		
 	}
 

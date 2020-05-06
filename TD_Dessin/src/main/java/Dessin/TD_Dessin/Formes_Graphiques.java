@@ -14,5 +14,5 @@ public abstract class Formes_Graphiques {
 		return this.name;
 	}
 	public abstract void print();
-	public abstract void move();
+	public abstract void move(int x,int y);
 }

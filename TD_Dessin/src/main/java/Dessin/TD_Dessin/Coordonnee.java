@@ -19,7 +19,7 @@ public class Coordonnee {
 	}
 	public void move(int X,int Y)
 	{
-		this.X=X;
-		this.Y=Y;
+		this.X+=X;
+		this.Y+=Y;
 	}
 }

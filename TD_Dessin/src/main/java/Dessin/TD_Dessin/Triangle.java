@@ -25,14 +25,20 @@ public class Triangle extends Formes_Graphiques {
 	}
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-		
+		String triangle =  this.name + " : triangle ("+ 
+	("(x:"+Coor1.getX() + "," + "y:"+Coor1.getY())+
+	("),(x:"+Coor2.getX() + "," + "y:"+Coor2.getY())+
+	("),(x:"+Coor3.getX() + "," + "y:"+Coor3.getY())+"))";
+		System.out.println(triangle);		
 	}
 
 	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-		
+	public void move(int x,int y) {
+
+		this.Coor1.move(x, y);
+		this.Coor2.move(x, y);
+		this.Coor3.move(x, y);
+
 	}
 
 }

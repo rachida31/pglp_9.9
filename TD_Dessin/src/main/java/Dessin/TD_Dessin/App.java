@@ -30,7 +30,7 @@ public class App
         System.out.println(" size " +l.size()+" classe "+l.get(2).getClass());
         c=new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3)));
         System.out.println(" X "+c.getX()+ " Y "+c.getY());
-        f=new Cercle((String)l.get(1),c,Integer.parseInt((String) l.get(4)));
+        f=new Cercle((String)l.get(0),c,Integer.parseInt((String) l.get(4)));
         f.print();
     }
     

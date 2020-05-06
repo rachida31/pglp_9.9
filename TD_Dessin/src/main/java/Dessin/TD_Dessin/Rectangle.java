@@ -24,14 +24,15 @@ public class Rectangle extends Formes_Graphiques  {
 	}
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-		
+		String rectangle =  this.name + " : Rectangle ((longueur:" + longueur +") "
+				 + ",(largeur:" + largeur +") "
+				 + (",(x:"+Coor.getX() + "," + "y:"+Coor.getY())+"))";
+		System.out.println(rectangle);
 	}
 
 	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-		
+	public void move(int x,int y) {
+		this.Coor.move(x, y);
 	}
 
 }
