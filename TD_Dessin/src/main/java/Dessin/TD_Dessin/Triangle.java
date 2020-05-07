@@ -7,9 +7,9 @@ public class Triangle extends Formes_Graphiques {
 
 	public Triangle(String name,Coordonnee Coor1,Coordonnee Coor2,Coordonnee Coor3) {
 		super(name);
-		this.Coor1=new Coordonnee(Coor1.getX(),Coor1.getY());;
-		this.Coor2=new Coordonnee(Coor2.getX(),Coor2.getY());;
-		this.Coor3=new Coordonnee(Coor3.getX(),Coor3.getY());;
+		this.Coor1=new Coordonnee(Coor1.getX(),Coor1.getY());
+		this.Coor2=new Coordonnee(Coor2.getX(),Coor2.getY());
+		this.Coor3=new Coordonnee(Coor3.getX(),Coor3.getY());
 	}
 	public Coordonnee getCoor1()
 	{

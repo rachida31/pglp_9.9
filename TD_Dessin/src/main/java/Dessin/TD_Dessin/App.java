@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+import Exeption.TableExisteException;
+
+
 /**
  * Hello world!
  *c1 = Cercle((0, 0), 50)
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws TableExisteException
     {
     	Coordonnee c;
     	Formes_Graphiques f;
@@ -32,6 +35,8 @@ public class App
         System.out.println(" X "+c.getX()+ " Y "+c.getY());
         f=new Cercle((String)l.get(0),c,Integer.parseInt((String) l.get(4)));
         f.print();
+        DerbyConnexion conn =new DerbyConnexion();
+    	conn.createtable();
     }
     
 }
