@@ -19,7 +19,7 @@ public class Form_Groupe extends Formes_Graphiques {
 		
 			public Form_Groupe(ArrayList<Formes_Graphiques> forme,String name)
 			{
-				super("name");
+				super(name);
 				this.forme=forme;
 			
 			}

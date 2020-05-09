@@ -16,11 +16,12 @@ public class CercleDAO implements DAO<Cercle>{
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"INSERT INTO cercle (nom, prenom, date,fonction)" +
+					"INSERT INTO Cercle (nomc,cx,cy,rayon)" +
 					"VALUES ( ?, ? , ? , ? )");
 			prepare.setString(1, cercle.getName());
 			prepare.setInt(2, cercle.getCentre().getX());
 			prepare.setInt(3, cercle.getCentre().getY());
+			prepare.setInt(4, cercle.getRayon());
 			int result = prepare.executeUpdate();
 			assert result == 1; 
 		}
@@ -30,9 +31,19 @@ public class CercleDAO implements DAO<Cercle>{
 	}
 
 	@Override
-	public void update(Cercle t, Cercle obj) {
+	public void update(Cercle cercle) {
 		// TODO Auto-generated method stub
-		
+		try (Connection conn = DriverManager.getConnection(dburl)) {
+			PreparedStatement prepare = conn.prepareStatement("UPDATE Cercle SET cx = ?,cy = ? WHERE nomc = ?");
+			prepare.setInt(1, cercle.getCentre().getX());
+			prepare.setInt(2, cercle.getCentre().getY());		
+			prepare.setString(3, cercle.getName().toString());
+			int result = prepare.executeUpdate();
+			assert result == 1;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -40,8 +51,8 @@ public class CercleDAO implements DAO<Cercle>{
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"DELETE FROM personnel "
-					+ "WHERE nom = ?");
+					"DELETE FROM Cercle "
+					+ "WHERE nomc = ?");
 			prepare.setString(1, cercle.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
@@ -60,25 +71,26 @@ public class CercleDAO implements DAO<Cercle>{
 		
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"SELECT * FROM Personnel WHERE nom = ?");
+					"SELECT * FROM Cercle WHERE nomc = ?");
 			prepare.setString(1, s);
 			ResultSet result = prepare.executeQuery();
 			if(result.next()) {
-				Coor=new Coordonnee(result.getInt("rx"),result.getInt("ry"));
-				cercle =new Cercle(result.getString("nom"),Coor,result.getInt("rayen"));
+				Coor=new Coordonnee(result.getInt("cx"),result.getInt("cy"));
+				cercle =new Cercle(result.getString("nomc"),Coor,result.getInt("rayon"));
 				
 				result.close();
-				
+
 			}
 			else
 			{
 				throw new InExistTupleException();
+				
 			}
 			}
 		catch (SQLException | Exeption.InExistTupleException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return cercle;
 	}
 
 }

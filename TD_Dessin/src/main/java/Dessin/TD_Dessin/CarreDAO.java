@@ -17,11 +17,12 @@ public class CarreDAO implements DAO<Carre> {
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"INSERT INTO Carre (nom, prenom, date,fonction)" +
+					"INSERT INTO Carre (noma,ax,ay,cote)" +
 					"VALUES ( ?, ? , ? , ? )");
 			prepare.setString(1, carre.getName());
 			prepare.setInt(2, carre.getCoor().getX());
 			prepare.setInt(3, carre.getCoor().getY());
+			prepare.setInt(4, carre.getCote());
 			int result = prepare.executeUpdate();
 			assert result == 1; 
 		}
@@ -31,9 +32,19 @@ public class CarreDAO implements DAO<Carre> {
 	}
 
 	@Override
-	public void update(Carre t, Carre obj) {
+	public void update(Carre carre) {
 		// TODO Auto-generated method stub
-		
+		try (Connection conn = DriverManager.getConnection(dburl)) {
+			PreparedStatement prepare = conn.prepareStatement("UPDATE Carre SET ax = ?,ay = ? WHERE noma = ?");
+			prepare.setInt(1, carre.getCoor().getX());
+			prepare.setInt(2, carre.getCoor().getY());		
+			prepare.setString(3, carre.getName().toString());
+			int result = prepare.executeUpdate();
+			assert result == 1;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -41,8 +52,8 @@ public class CarreDAO implements DAO<Carre> {
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"DELETE FROM personnel "
-					+ "WHERE nom = ?");
+					"DELETE FROM Carre "
+					+ "WHERE noma = ?");
 			prepare.setString(1, carre.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
@@ -60,12 +71,12 @@ public class CarreDAO implements DAO<Carre> {
 		
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"SELECT * FROM Personnel WHERE nom = ?");
+					"SELECT * FROM Carre WHERE noma = ?");
 			prepare.setString(1, s);
 			ResultSet result = prepare.executeQuery();
 			if(result.next()) {
-				Coor=new Coordonnee(result.getInt("rx"),result.getInt("ry"));
-				carre =new Carre(result.getString("nom"),Coor,result.getInt("cote"));
+				Coor=new Coordonnee(result.getInt("ax"),result.getInt("ay"));
+				carre =new Carre(result.getString("noma"),Coor,result.getInt("cote"));
 				
 				result.close();
 				
@@ -78,7 +89,7 @@ public class CarreDAO implements DAO<Carre> {
 		catch (SQLException | Exeption.InExistTupleException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return carre;
 	}
 
 }
