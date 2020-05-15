@@ -1,5 +1,5 @@
 
-package Dessin.TD_Dessin;
+package Dessin.TD_Dessin.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import Dessin.TD_Dessin.Coordonnee;
+import Dessin.TD_Dessin.Triangle;
 import Exeption.InExistTupleException;
 
 

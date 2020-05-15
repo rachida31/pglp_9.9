@@ -1,4 +1,4 @@
-package Dessin.TD_Dessin;
+package Dessin.TD_Dessin.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import Dessin.TD_Dessin.Carre;
+import Dessin.TD_Dessin.Cercle;
+import Dessin.TD_Dessin.Form_Groupe;
+import Dessin.TD_Dessin.Formes_Graphiques;
+import Dessin.TD_Dessin.Rectangle;
+import Dessin.TD_Dessin.Triangle;
 import Exeption.InExistTupleException;
 
 
@@ -169,19 +174,22 @@ int i=0;
 			PreparedStatement prepare = conn.prepareStatement(
 					"SELECT * FROM Approprier WHERE NomGroupe = ?");
 			prepare.setString(1, s);
-			ArrayList<Formes_Graphiques> listeForme =new ArrayList<Formes_Graphiques>();
 
 			ResultSet result = prepare.executeQuery();
 			  System.out.println("voilaaaaaaaaaaa 000000000   "+result.getFetchSize());
+			 // if(result.getFetchSize()!=0) {
+				  System.out.println("silasssssssss");
+				ArrayList<Formes_Graphiques> listeForme =new ArrayList<Formes_Graphiques>();
 			  CercleDAO cercle = new CercleDAO() ;
 			  CarreDAO carre = new CarreDAO();
 			  RectangleDAO rectangle = new RectangleDAO();
 			  TriangleDAO triangle = new TriangleDAO();
 			 // System.out.println("voilaaaaaaaaaaa 11111111  "+result.next());
-
+boolean bool=false;
 			while (result.next()){
+				bool=true;
 				  System.out.println("voilaaaaaaaaaaa 11111111  "+ result.getString("nomForme"));
-				  System.out.println (triangle.read(result.getString("nomForme")) instanceof Triangle); //vrai  
+				  System.out.println (cercle.read(result.getString("nomForme")) instanceof Cercle); //vrai  
 
 				  if(cercle.read(result.getString("nomForme")) instanceof Cercle) 
 				  {		  System.out.println("voilaaaaaaaaaaa ccccccccccccccccc ");
@@ -209,14 +217,14 @@ int i=0;
 				  }
 				  }
 System.out.println(listeForme.isEmpty()+" nnnnn  "+listeForme.size());
-			if(!listeForme.isEmpty()) {
+			if(bool) {
 				System.out.println("kkkkkkkkkkkkkkkkkkkkk lllllllllll kkkkkkkkkkk ");
 		 groupe = new Form_Groupe(listeForme,s);
-			}else
+			}/*else
 			{
 				throw new InExistTupleException();
 
-			}
+			}*/
 			
 				
 		}

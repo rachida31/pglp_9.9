@@ -1,4 +1,4 @@
-package Dessin.TD_Dessin;
+package Dessin.TD_Dessin.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,22 +6,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Dessin.TD_Dessin.Carre;
+import Dessin.TD_Dessin.Coordonnee;
 import Exeption.InExistTupleException;
 
-public class CercleDAO implements DAO<Cercle>{
+
+public class CarreDAO implements DAO<Carre> {
 	private static String dburl = DerbyConnexion.dburl;
 
 	@Override
-	public void create(Cercle cercle) {
+	public void create(Carre carre) {
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"INSERT INTO Cercle (nomc,cx,cy,rayon)" +
+					"INSERT INTO Carre (noma,ax,ay,cote)" +
 					"VALUES ( ?, ? , ? , ? )");
-			prepare.setString(1, cercle.getName());
-			prepare.setInt(2, cercle.getCentre().getX());
-			prepare.setInt(3, cercle.getCentre().getY());
-			prepare.setInt(4, cercle.getRayon());
+			prepare.setString(1, carre.getName());
+			prepare.setInt(2, carre.getCoor().getX());
+			prepare.setInt(3, carre.getCoor().getY());
+			prepare.setInt(4, carre.getCote());
 			int result = prepare.executeUpdate();
 			assert result == 1; 
 		}
@@ -31,13 +34,13 @@ public class CercleDAO implements DAO<Cercle>{
 	}
 
 	@Override
-	public void update(Cercle cercle) {
+	public void update(Carre carre) {
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
-			PreparedStatement prepare = conn.prepareStatement("UPDATE Cercle SET cx = ?,cy = ? WHERE nomc = ?");
-			prepare.setInt(1, cercle.getCentre().getX());
-			prepare.setInt(2, cercle.getCentre().getY());		
-			prepare.setString(3, cercle.getName().toString());
+			PreparedStatement prepare = conn.prepareStatement("UPDATE Carre SET ax = ?,ay = ? WHERE noma = ?");
+			prepare.setInt(1, carre.getCoor().getX());
+			prepare.setInt(2, carre.getCoor().getY());		
+			prepare.setString(3, carre.getName().toString());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		}
@@ -47,50 +50,48 @@ public class CercleDAO implements DAO<Cercle>{
 	}
 
 	@Override
-	public void delete(Cercle cercle) {
+	public void delete(Carre carre) {
 		// TODO Auto-generated method stub
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"DELETE FROM Cercle "
-					+ "WHERE nomc = ?");
-			prepare.setString(1, cercle.getName());
+					"DELETE FROM Carre "
+					+ "WHERE noma = ?");
+			prepare.setString(1, carre.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
-	public Cercle read(String s) {
+	public Carre read(String s) {
 		// TODO Auto-generated method stub
 		Coordonnee Coor;
-		Cercle cercle = null;
+		Carre carre = null;
 		
 		try (Connection conn = DriverManager.getConnection(dburl)) {
 			PreparedStatement prepare = conn.prepareStatement(
-					"SELECT * FROM Cercle WHERE nomc = ?");
+					"SELECT * FROM Carre WHERE noma = ?");
 			prepare.setString(1, s);
 			ResultSet result = prepare.executeQuery();
 			if(result.next()) {
-				Coor=new Coordonnee(result.getInt("cx"),result.getInt("cy"));
-				cercle =new Cercle(result.getString("nomc"),Coor,result.getInt("rayon"));
+				Coor=new Coordonnee(result.getInt("ax"),result.getInt("ay"));
+				carre =new Carre(result.getString("noma"),Coor,result.getInt("cote"));
 				
 				result.close();
-
+				
 			}
 			else
 			{
 				throw new InExistTupleException();
-				
 			}
 			}
 		catch (SQLException | Exeption.InExistTupleException e) {
 			e.printStackTrace();
 		}
-		return cercle;
+		return carre;
 	}
 
 }
