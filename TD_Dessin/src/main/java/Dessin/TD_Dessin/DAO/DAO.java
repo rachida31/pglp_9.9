@@ -1,7 +1,10 @@
 package Dessin.TD_Dessin.DAO;
-
-import java.beans.Statement;
-
+/**
+ *implemantation de l'interface  {@link DAO} pour implimenter les quatres 
+ *Operations CRUD
+ * @author rachida ouchene.
+ * 
+ */
 public interface DAO<T> {
 
 	

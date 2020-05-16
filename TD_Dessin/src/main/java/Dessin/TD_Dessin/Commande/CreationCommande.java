@@ -1,91 +1,81 @@
 package Dessin.TD_Dessin.Commande;
 
-import java.util.ArrayList;
-
+import java.sql.SQLException;
 import Dessin.TD_Dessin.Carre;
 import Dessin.TD_Dessin.Cercle;
-import Dessin.TD_Dessin.Coordonnee;
+import Dessin.TD_Dessin.Form_Groupe;
+import Dessin.TD_Dessin.Formes_Graphiques;
 import Dessin.TD_Dessin.Rectangle;
 import Dessin.TD_Dessin.Triangle;
 import Dessin.TD_Dessin.DAO.CarreDAO;
 import Dessin.TD_Dessin.DAO.CercleDAO;
 import Dessin.TD_Dessin.DAO.DaoFactory;
+import Dessin.TD_Dessin.DAO.Form_GroupeDAO;
 import Dessin.TD_Dessin.DAO.RectangleDAO;
 import Dessin.TD_Dessin.DAO.TriangleDAO;
 
+/**
+*classe CreationCommande pour la creation soit 'un cercle ou carre 
+*,rectangle,triangle ou un groupe de forme dans la base de donnée..
+* @author rachida ouchene.
+*/
 public class CreationCommande implements Commande{
-
-	ArrayList<String> l ;
-	DaoFactory daof;
-	public CreationCommande(ArrayList<String> l) {
+	/**  forme la forme que nous allons créer.
+	    * @see CreationCommande#CreationCommande( Formes_Graphiques)
+	    * @see CreationCommande#execute()
+	    */
+	private Formes_Graphiques forme;
+	/**  DaoFactory de type DaoFactory.
+	    *@see CreationCommande#CreationCommande( Formes_Graphiques)
+	    * @see CreationCommande#execute()
+	    */
+	private DaoFactory daof;
+	/**
+	 * constructeur CreationCommande.
+	 * qui initialise this.forme a forme et instancier l'objet daof de type DaoFactory.
+	 * @param forme c'est un objet de type Formes_Graphiques que nous voulons créer.
+	 * @see CreationCommande#forme .
+	 * @see CreationCommande#daof .
+	 * @exception SQLException
+	 * */
+	public CreationCommande(Formes_Graphiques forme) throws SQLException {
 		// TODO Auto-generated constructor stub
-		this.l=l;
+		this.forme=forme;
 		this.daof=new DaoFactory(); 
-		System.out.println("zzzzzzzzzzzzzzzzzzzzzz "+this.l.size());
 		
 	}
+	/**
+	 * Méthode execute qui fait appelle a la méthode create selon le type de l'objet forme  pour 
+	 * enregistrer une forme dans la base.
+	 * 
+	 * */
 	@Override
-	public void execute() {
+	public void execute() throws Exception {
 		// TODO Auto-generated method stub
-		
-    	System.out.println("creation commande  ");
-
-        if(l.get(1).equalsIgnoreCase("cercle"))
+        if(this.forme instanceof  Cercle)
         {
-            	System.out.println("hhhhhhhhhhhh cercle ");
-            	Coordonnee c=new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3)));
-                System.out.println(" X "+c.getX()+ " Y "+c.getY());
-            	CercleDAO cdao=(CercleDAO) DaoFactory.getCercleDAO();
-            	   Cercle cercle=new Cercle((String)l.get(0),c,Integer.parseInt((String) l.get(4)));
-            	cdao.create(cercle);
-        		System.out.println("Creation reussite!");
-
-
-        	
-        	
-       			
-        }
-        else if(l.get(1).equalsIgnoreCase("Carre"))
+            	CercleDAO cdao=(CercleDAO) daof.getCercleDAO();
+            	cdao.create((Cercle) forme);
+}
+        else if(this.forme instanceof  Carre)
         {
-        	System.out.println(" Carre ");
-          	CarreDAO cdao=(CarreDAO) DaoFactory.getCarreDAO();
-        	Coordonnee c=new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3)));
-        	  Carre carre=new Carre((String)l.get(0),c,Integer.parseInt((String) l.get(4)));
-          	cdao.create(carre);
-    		System.out.println("Creation reussite!");
-
-
-        	
-
+          	CarreDAO cdao=(CarreDAO) daof.getCarreDAO();
+          	cdao.create((Carre) forme);
         }
-        else if(l.get(1).equalsIgnoreCase("Triangle"))
+        else if(this.forme instanceof  Triangle)
         {
-        	System.out.println(" Triangle ");
-        	TriangleDAO cdao=(TriangleDAO) DaoFactory.getTriangleDAO();
-        	Coordonnee c1=new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3)));
-        	Coordonnee c2=new Coordonnee(Integer.parseInt((String) l.get(4)),Integer.parseInt((String) l.get(5)));
-        	Coordonnee c3=new Coordonnee(Integer.parseInt((String) l.get(6)),Integer.parseInt((String) l.get(7)));
-        	System.out.println(" X "+c1.getX()+ " Y "+c1.getY());
-        	Triangle triangle=new Triangle((String)l.get(0),c1,c2,c3);
-        	cdao.create(triangle);
-    		System.out.println("Creation reussite!");
-
-
-        }
-        else if(l.get(1).equalsIgnoreCase("Rectangle"))
+        	TriangleDAO cdao=(TriangleDAO) daof.getTriangleDAO();
+        	cdao.create((Triangle) forme);
+     }
+        else if(this.forme instanceof  Rectangle)
         {
-        	System.out.println(" Carre ");
-        	RectangleDAO cdao=(RectangleDAO) DaoFactory.getRectangleDAO();
-        	Coordonnee c=new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3)));
-        	System.out.println(" X "+c.getX()+ " Y "+c.getY());
-        	Rectangle rectangle=new Rectangle((String)l.get(0),c,Integer.parseInt((String) l.get(4)),Integer.parseInt((String) l.get(4)));
-        	cdao.create(rectangle);
-    		System.out.println("Creation reussite!");
-
-
-        }
-
-		
+        	RectangleDAO cdao=(RectangleDAO) daof.getRectangleDAO();
+        	cdao.create((Rectangle) forme);
+        }else if(this.forme instanceof  Form_Groupe)
+		{
+			Form_GroupeDAO cdao=(Form_GroupeDAO) daof.getForm_GroupeDAO();
+        	cdao.create((Form_Groupe) forme);
 	}
-
+		System.out.println("Creation terminer!");
+	}
 }

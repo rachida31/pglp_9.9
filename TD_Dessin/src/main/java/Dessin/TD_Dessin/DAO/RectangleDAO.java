@@ -1,22 +1,39 @@
 package Dessin.TD_Dessin.DAO;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import Dessin.TD_Dessin.Coordonnee;
 import Dessin.TD_Dessin.Rectangle;
 import Exeption.InExistTupleException;
-
+/**
+ *implemantation de la classe RectangleDAO 
+ *pour pouvoir creer , modifier,lire et supprimer un rectangle de la base.
+ * @author rachida ouchene.
+ * 
+ */
 public class RectangleDAO implements DAO<Rectangle>{
-	private static String dburl = DerbyConnexion.dburl;
-
+	/**
+	 * attribut Connection pour fiare la connection a la base de donnée.
+	 * */
+	private Connection conn; 
+	/**
+	 * constructeur de la classe RectangleDAO initialise @see conn .
+	 * @param conn .
+	 * */
+	public RectangleDAO(Connection conn)
+	{
+		this.conn=conn;
+		}
+	/**
+	 * Rajoute un Rectangle a la table Rectangle de la base.
+	 * @param rectangle: l'objet Rectangle a enregistrer.
+	 *  @exception SQLException
+	 * */
 	@Override
 	public void create(Rectangle rectangle) {
 		// TODO Auto-generated method stub
-		try (Connection conn = DriverManager.getConnection(dburl)) {
+		try  {
 			PreparedStatement prepare = conn.prepareStatement(
 					"INSERT INTO Rectangle (nomr,rx,ry,largeur,longueur)" +
 					"VALUES ( ?, ? , ? , ? , ? )");
@@ -33,30 +50,35 @@ public class RectangleDAO implements DAO<Rectangle>{
 		}
 		
 	}
-
+	 /**
+	   *Modifier les valeurs rx et ry dans la base de rectangle passe en parametre apres le move. 
+	   *@param rectangle: le pour le quel on modiffie les coordonnees.  
+	   * @exception SQLException
+	   */
 	@Override
 	public void update(Rectangle rectangle) {
 		// TODO Auto-generated method stub
-		try (Connection conn = DriverManager.getConnection(dburl)) {
-			System.out.println("ffffffffffffffffffffff");
+		try  {
 			PreparedStatement prepare = conn.prepareStatement("UPDATE Rectangle SET rx = ?,ry = ? WHERE nomr = ?");
 			prepare.setInt(1, rectangle.getCoor().getX());
 			prepare.setInt(2, rectangle.getCoor().getY());		
 			prepare.setString(3, rectangle.getName().toString());
 			int result = prepare.executeUpdate();
-			System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrr  "+result);
-
 			assert result == 1;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Suppression de rectangle de la table Rectangle de la base.
+	 * @param rectangle : le rectangle a supprimer.
+	 *  @exception SQLException
+	 * */
 	@Override
 	public void delete(Rectangle rectangle) {
 		// TODO Auto-generated method stub
-		try (Connection conn = DriverManager.getConnection(dburl)) {
+		try  {
 			PreparedStatement prepare = conn.prepareStatement(
 					"DELETE FROM Rectangle "
 					+ "WHERE nomr = ?");
@@ -70,14 +92,20 @@ public class RectangleDAO implements DAO<Rectangle>{
 		
 		
 	}
-
+	/**
+	 * Recherche un Rectangle dans la table Rectangle de la base appartir de son nom.
+	 * @param nom : le nom de rectangle rechercher.
+	 * @return rectangle : le rectangle recherecher.
+	 * @exception InExistTupleException 
+	 *  @exception SQLException
+	 * */
 	@Override
 	public Rectangle read(String s) {
 		// TODO Auto-generated method stub
 		Coordonnee Coor;
 		Rectangle rectangle = null;
 		
-		try (Connection conn = DriverManager.getConnection(dburl)) {
+		try  {
 			PreparedStatement prepare = conn.prepareStatement(
 					"SELECT * FROM Rectangle WHERE nomr = ?");
 			prepare.setString(1, s);
@@ -89,12 +117,9 @@ public class RectangleDAO implements DAO<Rectangle>{
 				result.close();
 				
 			}
-			else
-			{
-				throw new InExistTupleException();
+			
 			}
-			}
-		catch (SQLException | Exeption.InExistTupleException e) {
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return rectangle;

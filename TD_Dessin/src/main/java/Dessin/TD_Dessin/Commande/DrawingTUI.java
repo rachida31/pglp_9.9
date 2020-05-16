@@ -1,74 +1,102 @@
 package Dessin.TD_Dessin.Commande;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
+import Dessin.TD_Dessin.Carre;
 import Dessin.TD_Dessin.Cercle;
 import Dessin.TD_Dessin.Coordonnee;
+import Dessin.TD_Dessin.Form_Groupe;
 import Dessin.TD_Dessin.Formes_Graphiques;
+import Dessin.TD_Dessin.Rectangle;
+import Dessin.TD_Dessin.Triangle;
+import Dessin.TD_Dessin.DAO.CarreDAO;
+import Dessin.TD_Dessin.DAO.CercleDAO;
 import Dessin.TD_Dessin.DAO.DaoFactory;
+import Dessin.TD_Dessin.DAO.Form_GroupeDAO;
+import Dessin.TD_Dessin.DAO.RectangleDAO;
+import Dessin.TD_Dessin.DAO.TriangleDAO;
 
 
+/**
+*classe DrawingTUI l'interface de l'utilisateur.
+* @author rachida ouchene.
+*/
 public class DrawingTUI {
+	/**  forme la forme  que nous allons creer pour vérifier si elle correcte.
+	    * @see DrawingTUI#DrawingTUI( )
+	    */
 	private Formes_Graphiques forme;
-	//private ArrayList<String> l;
-	//private DaoFactory drf;
-	public DrawingTUI()
+	/**  formecree la forme sur la quelle nous allons appliquer une commande.
+	  * @see DrawingTUI#DrawingTUI( )
+	  */
+	private Formes_Graphiques formecree;
+	/**  DaoFactory de type DaoFactory.
+	  * @see DrawingTUI#DrawingTUI( )
+	  */
+	private DaoFactory daof;
+	/**
+	 * la liste des forme realiser par l'utilisateure
+	 * */
+	private ArrayList<Formes_Graphiques> listeforme;
+	/**
+	 * constructeur DrawingTUI.
+	 * qui initialise this.forme a null this.firmecree a null  et instancier l'objet daof de type DaoFactory.
+	 * @see DrawingTUI#forme .
+	 * @see DrawingTUI#formecree .
+	 * @see DrawingTUI#daof .
+	 * @exception SQLException
+	 * */
+	public DrawingTUI() throws SQLException
 	{
 		this.forme=null;
-		//this.l= new ArrayList<String>();
-		//drf=new DaoFactory();
+		this.formecree=null;
+		this.daof=new DaoFactory();
+		this.listeforme=new ArrayList<Formes_Graphiques>();
 	}
+	/**
+	 * Elle verifie que la chaine passe par l'utilisateur pour cree un groupe de forme est sans erreur aussi que ce groupe 
+	 * n'existe pas dans la base aussi que les formes de ce groupe existe deja ,si tout est bon on peut creer la forme corresspond acette chaine pour appliquer sur elle 
+	 * la commande et la c'est la creation. 
+	 * */
 	public void dessinGroupe( ArrayList<String> l) throws Exception
 	{
-    	System.out.println("dessin groupe ");
     	Formes_Graphiques f=null;
 		if(l.get(1).equalsIgnoreCase("groupe"))
-		{ 
-        	System.out.println("hhhhhhhhhhhh groupe ");
-	        	
-	        		if(l.size()<=3)
+		{ 	
+			if(l.size()<=2)
 	        		{
-	        		System.out.println(" Merci de mettre le bon nombre d\'element pour crer le groupe !");
+	        		System.out.println(" Erreur le nombre d\'élement pour créer le groupe est insuffisant!");
 	        		forme=null;
 	        		}
 	        		else if(!("g".regionMatches(true, 0, l.get(0), 0, 1)))
 	        		{
-	            	System.out.println(" Merci de mettre le nom de votre groupe comme suit : \" g \" avec un chiffre !");	
+	            	System.out.println(" Erreur le nom de votre groupe doit commencer par : \" g \" et suiver par un chiffre !");	
 	        		forme=null;
 	        		}
 	        		else 
 	        		{
 	        			int i=2;
-      		    	  System.out.println("taaaaaaiiiiiiilllllee  "+l.size());
       		    	  while(i<l.size())
-      		    	  { 	System.out.println("qqqqqqqqqqqqqqqxxxxxxxxxxx");	  
-
+      		    	  { 		  
       		    		  if(("a".regionMatches(true, 0, l.get(i), 0, 1)))
-      		  	        {System.out.println("44444444444444111111111111");
-    		  	        	  f=DaoFactory.getCarreDAO().read(l.get(i));
-    		  	        	  f.print();
+      		  	        { 
+    		  	        	  f=daof.getCarreDAO().read(l.get(i));
     		  	        }
     		  	          else if(("c".regionMatches(true, 0, l.get(i), 0, 1)))
     		  		        {	
-    		  	        	  System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaassssssssssss");
-    		  	        	  f=DaoFactory.getCercleDAO().read(l.get(i));
-    		  	        	  f.print();
+    		  	        	  f=daof.getCercleDAO().read(l.get(i));
 
     		  		        }   else if(("t".regionMatches(true, 0, l.get(i), 0, 1)))
-    		  		        {     System.out.println("tttttttttttttttttttttttttttttttt");
-
-    		  		        	  f=DaoFactory.getTriangleDAO().read(l.get(i));
-    		  		        	  f.print();
-
+    		  		        {   
+    		  		        	  f=daof.getTriangleDAO().read(l.get(i));
     		  		        }   else if(("r".regionMatches(true, 0, l.get(i), 0, 1)))
     		  		        {
-    		  		        	  f=DaoFactory.getRectangleDAO().read(l.get(i));
-    		  		        	  f.print();
+    		  		        	  f=daof.getRectangleDAO().read(l.get(i));
     		  		        }
       		    		  if(f==null)
       		    		  {
-                		System.out.println("La forme "+l.get(i)+" n'existe pas vous douvez  mttre une forme qui existe merci!");	  
+                		System.out.println("Erreur la forme \" "+l.get(i)+"\" n'existe pas vous douvez  mettre une forme existante merci!");	  
       		    		forme=new Cercle ("c0",new Coordonnee(0,0),0);
       		    		
                 		break;
@@ -76,72 +104,127 @@ public class DrawingTUI {
       		    		  i++;
       		    	  }
 	        			if(f!=null) { 
-      		    	  System.out.println("ddddddddddddddddddddddddddddd");
-	  	        		    forme=DaoFactory.getForm_GroupeDAO().read(l.get(0));
-	        		  //  forme.print();
+	  	        		    forme=daof.getForm_GroupeDAO().read(l.get(0));
 	        		      if(forme!=null)
 	        		      {
-	        		    	 // forme=null;
-	        	        System.out.println("Le nom que vous avez donner a votre groupe existe déja merci de le modifier!");
+	        	        System.out.println(" Erreur ce nom de groupe existe déja merci de le modifier!");
 	        		      }
-	        		      else {
-	        		    	  System.out.println("yyyyyyyyyyyyyyyeeeeeeeeeeeeessssssssssss");
+	        		      else {	
+	        		            formecree=new Form_Groupe((String)l.get(0));
+
+	        		            	int j=2;
+	        		            		while(j<l.size())
+	        		            		{
+	        		  		    		  if(("a".regionMatches(true, 0, l.get(j), 0, 1)))
+	        		  		  	        {
+	        		  		    			((Form_Groupe) formecree).add(daof.getCarreDAO().read(l.get(j)));
+	        		  		  	        }
+	        		  		  	          else if(("c".regionMatches(true, 0, l.get(j), 0, 1)))
+	        		  		  		        {
+	        		  		  	        	((Form_Groupe) formecree).add(daof.getCercleDAO().read(l.get(j)));
+
+	        		  		  		        }   else if(("t".regionMatches(true, 0, l.get(j), 0, 1)))
+	        		  		  		        {
+	        		  		  		        ((Form_Groupe) formecree).add(daof.getTriangleDAO().read(l.get(j)));
+
+	        		  		  		        }   else if(("r".regionMatches(true, 0, l.get(j), 0, 1)))
+	        		  		  		        {
+	        		  		  		        ((Form_Groupe) formecree).add(daof.getRectangleDAO().read(l.get(j)));
+	        		  		  		        }
+	        		            			j++;
+	        		           		}
 	        		      }
 	        		      }
-	        			else System.out.println("nnnnnnnnnnoooooooooooonnnnnnnnnn");	
 	        		}}
 							}
+	/**
+	 * elle verifier si la chaine passer en parametre c'est un entier ou non.
+	 * */
+	private boolean testErreur (String cc){
+		char [] s =cc.toCharArray();
+		boolean testerreurfrappe= true;
+
+		for (int i=0; i<s.length;i++){
+		if(!Character.isDigit(s[i]) )
+		{testerreurfrappe= false;}
+		}
+		return testerreurfrappe;
+		}
+	/**
+	 * Elle verifie que la chaine passe par l'utilisateur pour cree une forme est sans erreur aussi que cette forme 
+	 * n'existe pas dans la base si tt est bon on peut creer la forme corresspond acette chaine pour appliquer sur elle 
+	 * la commande et la c'est la creation. 
+	 * */
 	public void dessinForme( ArrayList<String> l) throws Exception
-	{
-       System.out.println(l);
-     
-   	System.out.println("dessin forme ");
- 
+	{     
+	forme=new Cercle("c0",new Coordonnee(0,0),0);
+
         if(l.get(1).equalsIgnoreCase("cercle"))
         { 
-        	System.out.println("cercle");
-        	forme=new Cercle("c0",new Coordonnee(0,0),0);
         		if(l.size()!=5)
         		{
-        		System.out.println(" Merci de mettre le bon nombre d\'element pour dessiner votre cercle !");
+        		System.out.println(" Erreur le nombre d\'élement pour dessiner votre cercle est insuffisant !");
         		
         		}
         		else if(!("c".regionMatches(true, 0, l.get(0), 0, 1)))
         		{
-            	System.out.println(" Merci de mettre le nom de votre cercle comme suit : \" c \" avec un chiffre !");	
+            	System.out.println(" Erreur  le nom de  cercle doit commancer par: \" c \" suiver par un chiffre !");	
         		
+        		}
+        		else if(!testErreur(l.get(2))&&!testErreur(l.get(3)))
+        		{
+               System.out.println(" Erreur  les cooredonnee de centre pour le cercle doit être  des entiers!");	
+
+        		}
+        		else if(!testErreur(l.get(4)))
+        		{
+               System.out.println(" Erreur le rayon de cercle doit être un entier!");	
+
         		}
         		else 
         		{
-        		    forme=DaoFactory.getCercleDAO().read(l.get(0));
+        		    forme=daof.getCercleDAO().read(l.get(0));
         		      if(forme!=null)
         		      {
-        	        System.out.println("Le nom que vous avez donner a votre cercle existe déja merci de le modifier!");
+        	        System.out.println("Erreur ce nom de cercle existe déja!");
 
+        		      }else
+        		      {
+        	                formecree=new Cercle((String)l.get(0),new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3))),Integer.parseInt((String) l.get(4)));
         		      }
         		}
-        		
-        	
-       			
         }
         else if(l.get(1).equalsIgnoreCase("Carre"))
         {if(l.size()!=5)
         		{
-        		System.out.println(" Merci de mettre le bon nombre d\'element pour dessiner votre carre !");
-        		forme=null;
+        		System.out.println("Erreur le nombre d\'élement pour dessiner le carre est insufisant!");
         		}
         		else if(!("a".regionMatches(true, 0, l.get(0), 0, 1)))
         		{
-            	System.out.println(" Merci de mettre le nom de votre carre comme suit : \" a \" avec un chiffre !");	
-        		forme=null;
+            	System.out.println(" Erreur le nom pour le carre doit commencer par : \" a \" puis suiver par un chiffre !");	
+        		}
+        		else if(!testErreur(l.get(2))||!testErreur(l.get(3)))
+        		{
+               System.out.println(" Erreur les cooredonnee de carre doit etre des entiers!");	
+
+        		}
+        		else if(!testErreur(l.get(4)))
+        		{
+               System.out.println("Erreur le rayon de carre doit etre un entier!");	
+
         		}
         		else 
         		{
-        		    forme=DaoFactory.getCarreDAO().read(l.get(0));
+        		   forme=daof.getCarreDAO().read(l.get(0));
         		      if(forme!=null)
         		      {
-        	        System.out.println("Le nom que vous avez donner a votre carre existe déja merci de le modifier!");
+        	        System.out.println("Erreur ce nom de carre existe déja merci de le modifier!");
 
+        		      }else
+        		      {
+        		    	  System.out.println(" Carre ");
+        		        	  formecree=new Carre((String)l.get(0),new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3))),Integer.parseInt((String) l.get(4)));
+        		          	
         		      }
         		}
         		
@@ -151,21 +234,31 @@ public class DrawingTUI {
         {
         		if(l.size()!=8)
         		{
-        		System.out.println(" Merci de mettre le bon nombre d\'element pour dessiner votre triangle !");
-        		forme=null;
+        		System.out.println(" Erreur le bon nombre d\'élement pour dessiner votre triangle est insuffisant!");
+        		
         		}
         		else if(!("t".regionMatches(true, 0, l.get(0), 0, 1)))
         		{
-            	System.out.println(" Merci de mettre le nom de votre triangele comme suit : \" t \" avec un chiffre !");	
-        		forme=null;
+            	System.out.println(" Erreur  le nom de  triangele doit commencer par: \" t \" puis suiver par un chiffre !");	
+        		
         		}
+        		else if(!testErreur(l.get(2))||!testErreur(l.get(3))||!testErreur(l.get(4))||!testErreur(l.get(5))||!testErreur(l.get(6))||!testErreur(l.get(7)))
+        		{
+               System.out.println(" Erreur  les cooredonnee des trois poinds de triangle doivent etre des entiers!");	
+
+        		}
+        		
         		else 
         		{
-        		    forme=DaoFactory.getTriangleDAO().read(l.get(0));
+        		    forme=daof.getTriangleDAO().read(l.get(0));
         		      if(forme!=null)
         		      {
-        	        System.out.println("Le nom que vous avez donner a votre triangle existe déja merci de le modifier!");
+        	        System.out.println("Erreur ce nom pour le triangle existe déja merci de le modifier!");
 
+        		      }else
+        		      {
+        		        	formecree=new Triangle((String)l.get(0),new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3))),new Coordonnee(Integer.parseInt((String) l.get(4)),Integer.parseInt((String) l.get(5))),new Coordonnee(Integer.parseInt((String) l.get(6)),Integer.parseInt((String) l.get(7))));
+        		        	formecree.print();
         		      }
         		}
 
@@ -175,171 +268,243 @@ public class DrawingTUI {
         	
         		if(l.size()!=6)
         		{
-        		System.out.println(" Merci de mettre le bon nombre d\'element pour dessiner votre rectangle !");
-        		forme=null;
+        		System.out.println(" Erreur le bon nombre d\'element pour dessiner le rectangle est insuffisant!");
         		}
         		else if(!("r".regionMatches(true, 0, l.get(0), 0, 1)))
         		{
-            	System.out.println(" Merci de mettre le nom de votre rectangle comme suit : \" r \" avec un chiffre !");	
-        		forme=null;
+            	System.out.println(" Erreur le nom de rectangle doit cpmmencer par : \" r \" puis suiver par un chiffre !");	
+        		}
+        		else if(!testErreur(l.get(2))||!testErreur(l.get(3)))
+        		{
+               System.out.println(" Erreur les cooredonnee de rectangle doivent etre des entiers!");	
+
+        		}
+        		else if(!testErreur(l.get(4))||!testErreur(l.get(5)))
+        		{
+               System.out.println(" Erreur  la largeur et la hauteur de rectangle doivent etre des entiers!");	
+
         		}
         		else 
         		{
-        		    forme=DaoFactory.getRectangleDAO().read(l.get(0));
+        		    forme=daof.getRectangleDAO().read(l.get(0));
         		      if(forme!=null)
         		      {
-        	        System.out.println("Le nom que vous avez donner a votre rectangle existe déja merci de le modifier!");
+        	        System.out.println("Erreur ce nom pour le rectangle existe déja merci de le modifier!");
 
+        		      }else 
+        		      {
+        		        	formecree=new Rectangle((String)l.get(0),new Coordonnee(Integer.parseInt((String) l.get(2)),Integer.parseInt((String) l.get(3))),Integer.parseInt((String) l.get(4)),Integer.parseInt((String) l.get(4)));
+        		        	
         		      }
         		}
         	
+        }else if(l.get(1).equalsIgnoreCase("groupe"))
+        {
+        	dessinGroupe(l);
         }
 		
 	}
+	/**
+	 * Elle verifie que la chaine passe par l'utilisateur pour deplacer une forme est sans erreur aussi que cette forme 
+	 * existe  dans la base si tout est bon on recupere de la base cette forme corresspond a la chaine  pour appliquer sur elle 
+	 * la commande et la c'est le deplacement(move). 
+	 * */
 	public void deplacerForme( ArrayList<String> l) throws Exception
 	{
 	   	System.out.println("deplacer forme ");
 
 	        		if(l.size()!=4)
 	        		{
-	        		System.out.println(" Merci de mettre le bon nombre d\'element pour effectuer le deplacement !");
+	        		System.out.println(" Erreur  le bon nombre d\'element de cette commnade est insuffisant pour effectuer le deplacement !");
 	        		forme=null;
 	        		}
 	          else if(("a".regionMatches(true, 0, l.get(1), 0, 1)))
 	        {
-	        	  forme=DaoFactory.getCarreDAO().read(l.get(1));
+	      	 if(!testErreur(l.get(2))&&!testErreur(l.get(3)))
+        		{
+               System.out.println(" Erreur les cooredonnee pour le deplacement de carre doivent etre des entiers!");	
+       		forme=null;
+        	}else {
+	        	 forme=daof.getCarreDAO().read(l.get(1));
+	        	 if(forme==null)
+	        	  {
+	        		  System.out.println("Erreur la forme n'existe pas pour etre déplacer!");
+	        	  }
+        	}
 	        }
 	          else if(("c".regionMatches(true, 0, l.get(1), 0, 1)))
-		        {	   	        	  System.out.println("jjjjjjjjjjjjjjjjhhhhhhhhh  "+ l.get(1));
-     	 
-	        	  forme=DaoFactory.getCercleDAO().read(l.get(1));
-forme.print();
+		        {	if(!testErreur(l.get(2))&&!testErreur(l.get(3)))
+        		{
+		               System.out.println(" Erreur les cooredonnee pour le deplacement de cercle doivent etre des entiers!");	
+		       		forme=null;
+		        	}else   { 
+	        	  forme=daof.getCercleDAO().read(l.get(1));
+	        	  if(forme==null)
+	        	  {
+	        		  System.out.println("Erreur la forme n'existe pas pour etre déplacer!");
+	        	  }
+		        	}
 		        }   else if(("t".regionMatches(true, 0, l.get(1), 0, 1)))
-		        {
-		        	  forme=DaoFactory.getTriangleDAO().read(l.get(1));
+		        {if(!testErreur(l.get(2))&&!testErreur(l.get(3)))
+        		{
+		               System.out.println(" Erreur les cooredonnee pour le deplacement de triangle doivent etre des entiers!");	
+		       		forme=null;
+		        	}else
+		        	  forme=daof.getTriangleDAO().read(l.get(1));
+		        if(forme==null)
+	        	  {
+	        		  System.out.println("Erreur la forme n'existe pas pour etre déplacer!");
+	        	  }
 
 		        }   else if(("r".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getRectangleDAO().read(l.get(1));
+		        	  forme=daof.getRectangleDAO().read(l.get(1));
+		        	  if(forme==null)
+		        	  {
+		        		  System.out.println("Erreur la forme n'existe pas pour etre déplacer!");
+		        	  }
 		        }
 		        else if(("g".regionMatches(true, 0, l.get(1), 0, 1)))
-		        {
-		        	  forme=DaoFactory.getForm_GroupeDAO().read(l.get(1));
-		        }
-			        	   	        	  System.out.println("jjjjjjjjjjjjjjjjtttttttttttthhhhhhhhh  "+ l.get(1));
-
+		        {if(!testErreur(l.get(2))&&!testErreur(l.get(3)))
+        		{
+		               System.out.println(" Erreur les cooredonnee pour le deplacement de groupe doivent etre des entiers!");	
+		       		forme=null;
+		        	}else {
+		        	  forme=daof.getForm_GroupeDAO().read(l.get(1));
+		        	  if(forme==null)
+		        	  {
+		        		  System.out.println("Erreur la forme n'existe pas pour etre déplacer!");
+		        	  }
+		        	}
+		        }else System.out.println("Erreur ce nom "+ l.get(1)+" ne correspond a aucune forme!");
 	}
-	public void afficheForme( ArrayList<String> l) throws Exception
+	/**
+	 * Elle verifie que la chaine passe par l'utilisateur pour afficher une forme est sans erreur aussi que cette forme 
+	 * existe dans la base si tout est bon on peut recupere  la forme corresspond a cette chaine pour appliquer sur elle 
+	 * la commande et la c'est la recherche d'une forme. 
+	 * */
+	public void findForme( ArrayList<String> l) throws Exception
 	{
-	   	System.out.println("affiche forme ");
-
 	        		if(l.size()!=2)
 	        		{
-	        		System.out.println(" Merci de mettre le bon nombre d\'element pour afficher!");
+	        		System.out.println(" Erreur le  nombre d\'element pour afficher est insuffisant!");
 	        		forme=null;
 	        		}
 	          else if(("a".regionMatches(true, 0, l.get(1), 0, 1)))
 	        {
-	        	  forme=DaoFactory.getCarreDAO().read(l.get(1));
+	        	  forme=daof.getCarreDAO().read(l.get(1));
 
 	        }
 	          else if(("c".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-	        	  forme=DaoFactory.getCercleDAO().read(l.get(1));
-	        	  forme.print();
- 
-		        }   else if(!("t".regionMatches(true, 0, l.get(1), 0, 1)))
+	        	  forme=daof.getCercleDAO().read(l.get(1)); 
+		        }   else if(("t".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getTriangleDAO().read(l.get(1));
+		        	  forme=daof.getTriangleDAO().read(l.get(1));
 		        }   else if(("r".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getRectangleDAO().read(l.get(1));
+		        	  forme=daof.getRectangleDAO().read(l.get(1));
 		        } else if(("g".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getForm_GroupeDAO().read(l.get(1));
+		        	  forme=daof.getForm_GroupeDAO().read(l.get(1));
 		        }
+	        		if(forme==null)
+	        		{
+	        			System.out.println(" Erreur vous douvez d'abord créer la forme pour la recherecher! ");
+	        		}
 	
 	}
+	/**
+	 * Elle verifie que la chaine passe par l'utilisateur pour cree une forme est sans erreur aussi que cette forme 
+	 * existe  dans la base si tout est bon on peut recupere la forme corresspond a cette chaine pour appliquer sur elle 
+	 * la commande et la c'est la supprission. 
+	 * */
 	public void deleteForme( ArrayList<String> l) throws Exception
 	{
 	   	System.out.println("effacer forme ");
+	   	int i=1;
 	        		if(l.size()!=2)
 	        		{
-	        		System.out.println(" Merci de mettre le bon nombre d\'element pour supprimer!");
+	        		System.out.println("Erreur le  nombre d\'element de cette  commande pour supprimer est insuffisant!");
 	        		forme=null;
 	        		}
-	          else if(!("a".regionMatches(true, 0, l.get(1), 0, 1)))
+	        		
+	          else if(("a".regionMatches(true, 0, l.get(1), 0, 1)))
 	        {
-	        	  forme=DaoFactory.getCarreDAO().read(l.get(1));
-
+	        	 forme=daof.getCarreDAO().read(l.get(1));
 	        }
-	          else if(!("c".regionMatches(true, 0, l.get(1), 0, 1)))
+	          else if(("c".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-	        	  forme=DaoFactory.getCercleDAO().read(l.get(1));
- 
-		        }   else if(!("t".regionMatches(true, 0, l.get(1), 0, 1)))
+	        	  forme=daof.getCercleDAO().read(l.get(1));
+	        	   }  else if(("t".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getTriangleDAO().read(l.get(1));
-		        }   else if(!("r".regionMatches(true, 0, l.get(1), 0, 1)))
+		        	  forme=daof.getTriangleDAO().read(l.get(1));
+		        }   else if(("r".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getRectangleDAO().read(l.get(1));
-		        } else if(!("g".regionMatches(true, 0, l.get(1), 0, 1)))
+		        	  forme=daof.getRectangleDAO().read(l.get(1));
+		        } else if(("g".regionMatches(true, 0, l.get(1), 0, 1)))
 		        {
-		        	  forme=DaoFactory.getForm_GroupeDAO().read(l.get(1));
+		        	  forme=daof.getForm_GroupeDAO().read(l.get(1));
 		        }
+	        		for (Formes_Graphiques formei :this.listeforme) {
+	        			
+		        	 if(formei.getName().equalsIgnoreCase(forme.getName())) 
+		        		{
+		        		 this.listeforme.remove(formei);
+		        		 i=0;
+		        		 break;
+		        		}
+		        }
+	        		if(i!=0)
+	        		{
+	        			 System.out.println(" Erreur vous douvez d'abord créer cette forme pour la supprimer!");
+		        			forme=null;
+	        		}
 	
 	}
+	/**
+	 * separe la chaine entree par l'utilisateur en token.
+	 * */
 	public  ArrayList<String> liste(String str)
 	{
 		 ArrayList<String> l=new  ArrayList<String>();
-		 System.out.println( "Hello World! "+ str );
-		 //l=null;
 	        StringTokenizer multiTokenizer = new StringTokenizer(str, "=(), ");
-	        System.out.println("length kkkkkkkk "+multiTokenizer.hasMoreTokens());
 	        while (multiTokenizer.hasMoreTokens())
 	        {
 	        	String a= multiTokenizer.nextToken();
 	        	l.add(a);
-	   		 System.out.println( "Hello World! aaaa "+a );
-
 	        }
-			 System.out.println( "Hello World!taille "+l.size() );
 return l;
 	}
+	 /**
+     * Recuperation de la commande demander par l'utlisateur.
+     * @param commande La chaine commande rentrée par l'utilisateur
+     * @return La command a executer
+     */
 	public Commande nextCommand(String commande) throws Exception
 	{
 		 ArrayList<String> l;
-	   	System.out.println("nextCommand forme ");
-
     	l=liste(commande);
        if(l.size()>1) {
 		if(!l.get(1).equalsIgnoreCase("cercle")&&!l.get(1).equalsIgnoreCase("carre")
 	        		&&!l.get(1).equalsIgnoreCase("triangle")&&!l.get(1).equalsIgnoreCase("rectangle")
 	        		&&!l.get(1).equalsIgnoreCase("groupe")&&!l.get(0).equalsIgnoreCase("move")&&!l.get(0).equalsIgnoreCase("delete")
-	        		&&!l.get(0).equalsIgnoreCase("print")&&!l.get(0).equalsIgnoreCase("exit"))
+	        		&&!l.get(0).equalsIgnoreCase("find"))
 	    
 		{
-			System.out.println("la commande que vous avez entrer ne correspond a aucun commande!");
+			System.out.println("Erreur la commande que vous avez entrer ne correspond a aucun commande!");
 			return null;
 		}
 		else {
 			if(l.get(1).equalsIgnoreCase("cercle")||l.get(1).equalsIgnoreCase("carre")
-	        ||l.get(1).equalsIgnoreCase("triangle")||l.get(1).equalsIgnoreCase("rectangle"))
+	        ||l.get(1).equalsIgnoreCase("triangle")||l.get(1).equalsIgnoreCase("rectangle")||l.get(1).equalsIgnoreCase("groupe"))
 			{
 				dessinForme(l);
 				if(forme==null) {
-				CreationCommande command= new CreationCommande(l);
+					this.listeforme.add(formecree);
+				CreationCommande command= new CreationCommande(formecree);
 				return command;}
 			}
-			else if(l.get(1).equalsIgnoreCase("groupe"))
-			{
-				dessinGroupe(l);
-				if(forme==null) {
-					System.out.println("ffffffffffooooooooooorrrrrrmmmmm");
-				CreationGroupeCommande command= new CreationGroupeCommande(l);
-				return command;	}
-			}
-			
 			else if(l.get(0).equalsIgnoreCase("move"))
 			{
 				  deplacerForme(l);
@@ -355,27 +520,75 @@ return l;
 				DeleteCommande command= new DeleteCommande(forme);
 				return command;	}
 			}
-			else if(l.get(0).equalsIgnoreCase("print"))
+			else if(l.get(0).equalsIgnoreCase("find"))
 			{
-				 afficheForme(l);
+				 findForme(l);
 					if(forme!=null) {
-				ReadCommande command= new ReadCommande(forme);
+						FindCommande command= new FindCommande(forme);
 				return command;	}
 			}
-			else if(l.get(0).equalsIgnoreCase("exit"))
+			
+		}
+       
+       }else if (l.size()==1)
+       {
+    	   if(l.get(0).equalsIgnoreCase("exit"))
 			{
-				
+				this.listeforme.clear();
 				ExiteCommande command= new ExiteCommande();
 				return command;	
+			}else
+			{
+				System.out.println("Erreur la commande que vous avez entrer ne correspond a aucun commande!");
+				return null;	
 			}
-		}
        }
 	return null;
 		
 	}
-	public void affiche()
-	{
-		this.forme.print();
+	/**
+	 * affiche les information d'une des formes realiser par l'utilisateur.
+	 * */
+	public void afficheForme()
+	{    
+		System.out.println("   Voila la liste des formes que vous avez réaliser :");
+		Formes_Graphiques f=null;
+		for (Formes_Graphiques formei :this.listeforme) {
+			if(formei instanceof  Cercle)
+			{
+	        	CercleDAO cdao=(CercleDAO) daof.getCercleDAO();
+	        	f=cdao.read(formei.getName());
+			}
+			else if(formei instanceof  Carre)
+			{
+				CarreDAO cdao=(CarreDAO) daof.getCarreDAO();
+	        	f=cdao.read(formei.getName());
+
+			}
+			else if(formei instanceof  Rectangle)
+			{
+				RectangleDAO cdao=(RectangleDAO) daof.getRectangleDAO();
+	        	f=cdao.read(formei.getName());
+
+			}
+			else if(formei instanceof  Triangle)
+			{
+				TriangleDAO cdao=(TriangleDAO) daof.getTriangleDAO();
+	        	f=cdao.read(formei.getName());
+
+			}
+			else if(formei instanceof  Form_Groupe)
+			{
+				Form_GroupeDAO cdao=(Form_GroupeDAO) daof.getForm_GroupeDAO();
+	        	try {
+					f=cdao.read(formei.getName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		        f.print();  
+		    }
 	}
 
 }
