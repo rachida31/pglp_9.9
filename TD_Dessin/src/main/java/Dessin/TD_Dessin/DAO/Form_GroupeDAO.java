@@ -24,34 +24,39 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 
 	/**
 	 * constructeur de la classe Form_GroupeDAO initialise @see conn.
-	 * @param conn .
+	 * @param conn1 .
 	 */
-	public Form_GroupeDAO(final Connection conn) {
-		this.conn = conn;
+	public Form_GroupeDAO(final Connection conn1) {
+		this.conn = conn1;
 	}
 
 	/**
 	 * Rajoute un groupe a la table GroupeForme de la base.
-	 * @param groupe: l'objet Form_Groupe a enregistrer.
+	 * @param groupe : l'objet Form_Groupe a enregistrer.
 	 * @throws SQLException
 	 */
 	@Override
 	public final void create(final Form_Groupe groupe) throws Exception {
 // TODO Auto-generated method stub
 		try {
-			PreparedStatement prepare = conn.prepareStatement("INSERT INTO "
-					+ "GroupeForme (Name)" + "VALUES (?)");
+			PreparedStatement prepare = conn.
+					prepareStatement("INSERT INTO "
+					+ "GroupeForme (Name) "
+					+ "VALUES (?)");
 			prepare.setString(1, groupe.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
-			ArrayList<Formes_Graphiques> listeForme = groupe.getForme();
+			ArrayList<Formes_Graphiques>
+			listeForme = groupe.getForme();
 			int i = 0;
 			while (i < listeForme.size()) {
 				i++;
 			}
 			for (Formes_Graphiques forme : listeForme) {
-				prepare = conn.prepareStatement("INSERT INTO Approprier "
-						+ "(nomForme,NomGroupe)" + "VALUES (?, ?)");
+				prepare = conn.prepareStatement("INSERT"
+						+ " INTO Approprier "
+						+ "(nomForme,NomGroupe) "
+						+ "VALUES (?, ?)");
 				prepare.setString(1, forme.getName());
 				prepare.setString(2, groupe.getName());
 				prepare.executeUpdate();
@@ -64,20 +69,21 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 	/**
 	 * Modifier les coordonnees de les formes que son Approprier a le groupe
 	 * passer en parametre dans la base apres le move.
-	 * @param groupe: le groupe pour le quel on modiffie les coordonnees.
-	 * @throws SQLException
+	 * @param groupe1 : le groupe pour le quel on modiffie les coordonnees.
+	 * @throws Exception .
 	 */
 	@Override
 	public final void update(final Form_Groupe groupe1) throws Exception {
 // TODO Auto-generated method stub
 		try {
 			System.out.println("Recherche ");
-			PreparedStatement prepare = conn.prepareStatement("SELECT * FROM "
+			PreparedStatement prepare = conn.
+					prepareStatement("SELECT * FROM "
 					+ "Approprier WHERE NomGroupe = ?");
 			prepare.setString(1, groupe1.getName());
-			ArrayList<Formes_Graphiques> listeForme = groupe1.getForme();
-
 			ResultSet result = prepare.executeQuery();
+			ArrayList<Formes_Graphiques>
+			listeForme = groupe1.getForme();
 			CercleDAO cercle = new CercleDAO(conn);
 			CarreDAO carre = new CarreDAO(conn);
 			RectangleDAO rectangle = new RectangleDAO(conn);
@@ -88,24 +94,34 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 			Triangle triangle1 = null;
 			int i = 0;
 			while (result.next()) {
-				if (cercle.read(result.getString("nomForme"))
+				if (cercle.read(result.
+						getString("nomForme"))
 						instanceof Cercle) {
-					cercle1 = (Cercle) listeForme.get(i);
+					cercle1 = (Cercle)
+							listeForme.get(i);
 					cercle.update(cercle1);
 					i++;
-				} else if (triangle.read(result.getString("nomForme"))
+				} else if (triangle.read(result.
+						getString("nomForme"))
 						instanceof Triangle) {
-					triangle1 = (Triangle) listeForme.get(i);
+					triangle1 = (Triangle)
+							listeForme.get(i);
 					triangle.update(triangle1);
 					i++;
-				} else if (carre.read(result.getString("nomForme"))
+				} else if (carre.
+						read(result.
+						getString("nomForme"))
 						instanceof Carre) {
-					carre1 = (Carre) listeForme.get(i);
+					carre1 = (Carre)
+							listeForme.get(i);
 					carre.update(carre1);
 					i++;
-				} else if (rectangle.read(result.getString("nomForme"))
+				} else if (rectangle.
+						read(result.
+						getString("nomForme"))
 						instanceof Rectangle) {
-					rectangle1 = (Rectangle) listeForme.get(i);
+					rectangle1 = (Rectangle)
+							listeForme.get(i);
 					rectangle.update(rectangle1);
 					i++;
 				}
@@ -116,7 +132,8 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 	}
 
 	/**
-	 * Suppression de groupe de la table Groupe et les le nom de groupe avec le
+	 * Suppression de groupe de la table
+	 * Groupe et les le nom de groupe avec le
 	 * nom de ces formes dans la table Approprier de la base.
 	 * @param groupe : le groupe a supprimer.
 	 * @throws SQLException
@@ -125,17 +142,19 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 	public final void delete(final Form_Groupe groupe) throws Exception {
 // TODO Auto-generated method stub
 		try {
-			PreparedStatement prepare = conn.prepareStatement("DELETE FROM "
+			PreparedStatement prepare = conn.
+					prepareStatement("DELETE FROM "
 					+ "GroupeForme WHERE Name = ?");
 			prepare.setString(1, groupe.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
-			ArrayList<Formes_Graphiques> listeForme = groupe.getForme();
-
+			ArrayList<Formes_Graphiques>
+			listeForme = groupe.getForme();
 			for (Formes_Graphiques forme : listeForme) {
 				prepare = conn.prepareStatement(
-						"DELETE FROM Approprier " + "WHERE NomGroupe = ? "
-								+ "and nomForme = ? ");
+						"DELETE FROM Approprier "
+						+ "WHERE NomGroupe = ? "
+						+ "and nomForme = ? ");
 				prepare.setString(1, groupe.getName());
 				prepare.setString(2, forme.getName());
 				int result1 = prepare.executeUpdate();
@@ -151,21 +170,24 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 	 * appartir de son nom.
 	 * @param nom : le nom de groupe rechercher.
 	 * @return groupe : le groupe recherecher.
-	 * @exception InExistTupleException
-	 * @throws SQLException
+	 * @throws Exception :une exception si y a
+	 * un problemme avec l'execution de la sql.
 	 */
 	@Override
-	public Form_Groupe read(final String nom) throws Exception {
+	public final Form_Groupe read(final String nom) throws Exception {
 // TODO Auto-generated method stub
 		Form_Groupe groupe = null;
 		try {
-			PreparedStatement prepare = conn.prepareStatement("SELECT * FROM "
-					+ "Approprier WHERE NomGroupe = ?");
+			PreparedStatement prepare = conn.
+					prepareStatement("SELECT * "
+					+ "FROM "
+					+ "Approprier "
+					+ "WHERE NomGroupe = ?");
 			prepare.setString(1, nom);
 
 			ResultSet result = prepare.executeQuery();
-			ArrayList<Formes_Graphiques> listeForme = 
-					new ArrayList<Formes_Graphiques>();
+			ArrayList<Formes_Graphiques> listeForme = new
+					ArrayList<Formes_Graphiques>();
 			CercleDAO cercle = new CercleDAO(conn);
 			CarreDAO carre = new CarreDAO(conn);
 			RectangleDAO rectangle = new RectangleDAO(conn);
@@ -173,18 +195,26 @@ public class Form_GroupeDAO implements DAO<Form_Groupe> {
 			boolean bool = false;
 			while (result.next()) {
 				bool = true;
-				if (cercle.read(result.getString("nomForme"))
+				if (cercle.read(result.
+					getString("nomForme"))
 						instanceof Cercle) {
-					listeForme.add(cercle.read(result.getString("nomForme")));
-				} else if (triangle.read(result.getString("nomForme"))
+					listeForme.add(cercle.
+					read(result.getString("nomForme")));
+				} else if (triangle.
+					read(result.getString("nomForme"))
 						instanceof Triangle) {
-					listeForme.add(triangle.read(result.getString("nomForme")));
-				} else if (carre.read(result.getString("nomForme"))
+					listeForme.add(triangle.
+					read(result.getString("nomForme")));
+				} else if (carre.read(result.
+					getString("nomForme"))
 						instanceof Carre) {
-					listeForme.add(carre.read(result.getString("nomForme")));
-				} else if (rectangle.read(result.getString("nomForme"))
+					listeForme.add(carre.
+					read(result.getString("nomForme")));
+				} else if (rectangle.read(result.
+					getString("nomForme"))
 						instanceof Rectangle) {
-					listeForme.add(rectangle.read(result.getString("nomForme")));
+					listeForme.add(rectangle.
+					read(result.getString("nomForme")));
 				}
 			}
 			if (bool) {

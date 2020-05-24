@@ -12,8 +12,8 @@ import Exeption.ElementExistException;
 public interface Commande {
 /**
 * La finction execute pour les commandes.
-* @throws ElementExistException si un element n'existe pas dans la liste des
-* forme.
+* @throws ElementExistException si un element n'existe pas
+* dans la liste des forme.
 * @throws Exception  en cas de problème.
 * */
 void execute() throws ElementExistException, Exception;

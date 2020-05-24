@@ -35,14 +35,14 @@ private DaoFactory daof;
 /**
 * constructeur CreationCommande. qui initialise this.forme a forme et
 * instancier \n l'objet daof de type DaoFactory.
-* @param forme c'est un objet de type Formes_Graphiques on a crée.
+* @param forme1 c'est un objet de type Formes_Graphiques on a crée.
 * @see CreationCommande#forme .
 * @see CreationCommande#daof .
 * @throws SQLException si y a un problemme dans la base.
 **/
-public CreationCommande(final Formes_Graphiques forme) throws
+public CreationCommande(final Formes_Graphiques forme1) throws
 SQLException {
-this.forme = forme;
+this.forme = forme1;
 this.daof = new DaoFactory();
 }
 /**

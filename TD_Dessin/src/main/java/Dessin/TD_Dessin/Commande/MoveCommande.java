@@ -44,19 +44,21 @@ public class MoveCommande implements Commande {
 	 * constructeur MoveCommande. qui initialise this.forme a
 	 * forme et this.coor a coor et  instancier l'objet daof de type
 	 * DaoFactory.
-	 * @param forme c'est un objet de type Formes_Graphiques
+	 * @param forme1 c'est un objet de type Formes_Graphiques
 	 * que nous voulons modiffier.
-	 * @param coor  est un objet de type Coordonnee.
+	 * @param coor1  est un objet de type Coordonnee.
 	 * @see MoveCommande#forme .
 	 * @see MoveCommande#coor .
 	 * @see MoveCommande#daof .
 	 * @throws SQLException une exception si y a
 	 * un problemme avec l'execution de la sql.
 	 */
-	public MoveCommande(final Formes_Graphiques forme, final Coordonnee coor)
+	public MoveCommande(final
+			Formes_Graphiques forme1, final
+			Coordonnee coor1)
 			throws SQLException {
-		this.forme = forme;
-		this.coor = coor;
+		this.forme = forme1;
+		this.coor = coor1;
 		this.daof = new DaoFactory();
 	}
 

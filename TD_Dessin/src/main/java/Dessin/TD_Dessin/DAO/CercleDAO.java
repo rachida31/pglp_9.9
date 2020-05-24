@@ -16,13 +16,17 @@ public class CercleDAO implements DAO<Cercle> {
 	 * attribut Connection pour fiare la connection a la base de donnée.
 	 */
 	private Connection conn;
+	/**
+	 *int . 
+	 **/
+	private final int a = 1,b = 2, c = 3, d = 4;
 
 	/**
 	 * constructeur de la classe CercleDAO initialise @see conn .
-	 * @param conn .
+	 * @param conn1 .
 	 */
-	public CercleDAO(final Connection conn) {
-		this.conn = conn;
+	public CercleDAO(final Connection conn1) {
+		this.conn = conn1;
 	}
 
 	/**
@@ -42,10 +46,10 @@ public class CercleDAO implements DAO<Cercle> {
 							+ "(nomc,cx,cy,rayon)"
 							+ "VALUES ( ?, ? ,"
 							+ " ? , ? )");
-			prepare.setString(1, cercle.getName());
-			prepare.setInt(2, cercle.getCentre().getX());
-			prepare.setInt(3, cercle.getCentre().getY());
-			prepare.setInt(4, cercle.getRayon());
+			prepare.setString(a, cercle.getName());
+			prepare.setInt(b, cercle.getCentre().getX());
+			prepare.setInt(c, cercle.getCentre().getY());
+			prepare.setInt(d, cercle.getRayon());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		} catch (SQLException e) {
@@ -68,9 +72,9 @@ public class CercleDAO implements DAO<Cercle> {
 					"UPDATE Cercle "
 					+ "SET " + "cx = ?,"
 					+ "cy = ? WHERE nomc = ?");
-			prepare.setInt(1, cercle.getCentre().getX());
-			prepare.setInt(2, cercle.getCentre().getY());
-			prepare.setString(3, cercle.getName().toString());
+			prepare.setInt(a, cercle.getCentre().getX());
+			prepare.setInt(b, cercle.getCentre().getY());
+			prepare.setString(c, cercle.getName().toString());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		} catch (SQLException e) {
@@ -90,7 +94,7 @@ public class CercleDAO implements DAO<Cercle> {
 			PreparedStatement prepare = conn.prepareStatement(
 					"DELETE FROM "
 					+ "Cercle " + "WHERE nomc = ?");
-			prepare.setString(1, cercle.getName());
+			prepare.setString(a, cercle.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		} catch (SQLException e) {
@@ -103,19 +107,20 @@ public class CercleDAO implements DAO<Cercle> {
 	 * base appartir de son nom.
 	 * @param nom : le nom de Cercle rechercher.
 	 * @return cercle : le cercle cherecher.
-	 * @exception InExistTupleException
-	 * @exception SQLException
+	 * @exception SQLException :une exception si y a
+	 * un problemme avec l'execution de la sql.
 	 */
 	@Override
 	public final Cercle read(final String nom) {
 // TODO Auto-generated method stub
 		Coordonnee coor;
 		Cercle cercle = null;
-		try {
+		try {System.out.println("hhhhhhhhhhhhhhh");
 			PreparedStatement prepare = conn.prepareStatement(
 					"SELECT * "
-					+ "FROM Cercle WHERE nomc = ?");
-			prepare.setString(1, nom);
+					+ "FROM Cercle WHERE"
+					+ " nomc = ?");
+			prepare.setString(a, nom);
 			ResultSet result = prepare.executeQuery();
 			if (result.next()) {
 				coor = new Coordonnee(result.getInt("cx"),

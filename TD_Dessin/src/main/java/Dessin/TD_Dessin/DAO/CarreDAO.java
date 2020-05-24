@@ -17,13 +17,17 @@ public class CarreDAO implements DAO<Carre> {
 	 * attribut Connection pour fiare la connection a la base de donnée.
 	 */
 	private Connection conn;
+	/**
+	 * int . 
+	 **/
+	private final int a = 1,b = 2, c = 3, d = 4;
 
 	/**
 	 * constructeur de la classe CarreDAO initialise @see conn .
-	 * @param conn .
+	 * @param conn1 .
 	 */
-	public CarreDAO(final Connection conn) {
-		this.conn = conn;
+	public CarreDAO(final Connection conn1) {
+		this.conn = conn1;
 	}
 
 	/**
@@ -41,10 +45,10 @@ public class CarreDAO implements DAO<Carre> {
 							+ "(noma,ax,ay,cote)"
 							+ "VALUES ( ?, ? , "
 							+ "? , ? )");
-			prepare.setString(1, carre.getName());
-			prepare.setInt(2, carre.getCoor().getX());
-			prepare.setInt(3, carre.getCoor().getY());
-			prepare.setInt(4, carre.getCote());
+			prepare.setString(a, carre.getName());
+			prepare.setInt(b, carre.getCoor().getX());
+			prepare.setInt(c, carre.getCoor().getY());
+			prepare.setInt(d, carre.getCote());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		} catch (SQLException e) {
@@ -66,9 +70,9 @@ public class CarreDAO implements DAO<Carre> {
 			PreparedStatement prepare = conn.prepareStatement(
 					"UPDATE Carre "
 					+ "SET ax = ?,ay = ? WHERE noma = ?");
-			prepare.setInt(1, carre.getCoor().getX());
-			prepare.setInt(2, carre.getCoor().getY());
-			prepare.setString(3, carre.getName().toString());
+			prepare.setInt(a, carre.getCoor().getX());
+			prepare.setInt(b, carre.getCoor().getY());
+			prepare.setString(c, carre.getName().toString());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		} catch (SQLException e) {
@@ -88,8 +92,8 @@ public class CarreDAO implements DAO<Carre> {
 		try {
 			PreparedStatement prepare = conn.prepareStatement(
 					"DELETE FROM "
-					+ "Carre " + "WHERE noma = ?");
-			prepare.setString(1, carre.getName());
+					+ "Carre WHERE noma = ?");
+			prepare.setString(a, carre.getName());
 			int result = prepare.executeUpdate();
 			assert result == 1;
 		} catch (SQLException e) {
@@ -102,8 +106,8 @@ public class CarreDAO implements DAO<Carre> {
 	 * appartir de son nom.
 	 * @param nom : le nom de carre rechercher.
 	 * @return carre : le carre recherecher.
-	 * @exception InExistTupleException
-	 * @exception SQLException
+	 * @exception SQLException :une exception si y a
+	 * un problemme avec l'execution de la sql.
 	 */
 	@Override
 	public final Carre read(final String nom) {
@@ -114,12 +118,13 @@ public class CarreDAO implements DAO<Carre> {
 			PreparedStatement prepare = conn.prepareStatement(
 					"SELECT * FROM "
 					+ "Carre WHERE noma = ?");
-			prepare.setString(1, nom);
+			prepare.setString(a, nom);
 			ResultSet result = prepare.executeQuery();
 			if (result.next()) {
 				coor = new Coordonnee(result.getInt("ax"),
 						result.getInt("ay"));
-				carre = new Carre(result.getString("noma"), coor, result.
+				carre = new Carre(result.
+						getString("noma"), coor, result.
 						getInt("cote"));
 
 				result.close();

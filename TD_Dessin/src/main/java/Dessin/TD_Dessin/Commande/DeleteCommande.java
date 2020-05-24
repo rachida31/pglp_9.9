@@ -37,16 +37,16 @@ public class DeleteCommande implements Commande {
 	/**
 	 * constructeur DeleteCommande. qui initialise this.forme a forme et
 	 * instancier l'objet daof de type DaoFactory.
-	 * @param forme c'est un objet de type Formes_Graphiques
+	 * @param forme1 c'est un objet de type Formes_Graphiques
 	 * que nous voulons supprimer.
 	 * @see DeleteCommande#forme .
 	 * @see DeleteCommande#daof .
 	 * @throws SQLException une exception si y a
 	 * un problemme avec l'execution de la sql.
 	 */
-	public DeleteCommande(final Formes_Graphiques forme)
+	public DeleteCommande(final Formes_Graphiques forme1)
 			throws SQLException {
-		this.forme = forme;
+		this.forme = forme1;
 		this.daof = new DaoFactory();
 	}
 

@@ -36,15 +36,17 @@ public class FindCommande implements Commande {
 	/**
 	 * constructeur ReadCommande. qui initialise this.forme a forme et
 	 * instancier l'objet daof de type DaoFactory.
-	 * @param forme c'est un objet de type Formes_Graphiques
+	 * @param forme1 c'est un objet de type Formes_Graphiques
 	 * que nous lisons.
 	 * @see ReadCommande#forme .
 	 * @see ReadCommande#daof .
 	 * @exception SQLException une exception si y a
 	 * un problemme avec l'execution de la sql.
 	 */
-	public FindCommande(final Formes_Graphiques forme) throws SQLException {
-		this.forme = forme;
+	public FindCommande(final
+			Formes_Graphiques forme1) throws
+			SQLException {
+		this.forme = forme1;
 		this.daof = new DaoFactory();
 	}
 

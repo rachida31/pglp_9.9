@@ -9,9 +9,9 @@ import java.util.Properties;
 import java.sql.*;
 
 /**
- * implemantation de la classe DerbyConnexion pour creation de la base de donnee
+ * implemantation de la classe DerbyConnexion pour creation de
+ * la base de donnee.
  * et les tables.
- * 
  * @author rachida ouchene.
  */
 public class DerbyConnexion {
@@ -28,8 +28,8 @@ public class DerbyConnexion {
 	 */
 	private static final String pwd = "Ouchene";
 
-	/**
-	 * Constructor DerbyConnexion qui définir la propriété de connexion
+	/**.
+	 * Constructor DerbyConnexion qui définir la propriété de connexion.
 	 */
 	public DerbyConnexion() {
 		Properties connectionProps = new Properties();
@@ -39,7 +39,8 @@ public class DerbyConnexion {
 
 	/**
 	 * ceation de la base et les table cercle ,carre ,rectangle,
-	 * triangle,groupeForme et Approprier \n si elles n'existent pas sinon une
+	 * triangle,groupeForme et Approprier
+	 * si elles n'existent pas sinon une
 	 * exception est levé.
 	 * @throws SQLException
 	 */
@@ -47,25 +48,34 @@ public class DerbyConnexion {
 		try {
 
 			Connection conn = DriverManager.getConnection(dburl);
-			// creationde l'objet Statement pour envoyer des instructions .
+			// creationde l'objet Statement
+			//pour envoyer des instructions .
 			Statement state = conn.createStatement();
-			DatabaseMetaData databaseMetadata = conn.getMetaData();
-			ResultSet resultSet = databaseMetadata.getTables(null, null,
-						"CERCLE", null);
+			DatabaseMetaData databaseMetadata = conn.
+					getMetaData();
+			ResultSet resultSet = databaseMetadata.
+					getTables(null, null, ""
+					+ "CERCLE", null);
 			if (resultSet.next()) {
 				state.addBatch("DROP TABLE Cercle");
 			}
 			state.addBatch("CREATE TABLE Cercle ("
-					+ "nomc VARCHAR(255) NOT NULL , " + "cx int NOT NULL , "
-					+ "cy int NOT NULL, " + "rayon int NOT NULL, "
+					+ "nomc VARCHAR(255) NOT NULL , "
+					+ "cx int NOT NULL , "
+					+ "cy int NOT NULL, "
+					+ "rayon int NOT NULL, "
 					+ "PRIMARY KEY (nomc))");
-			resultSet = databaseMetadata.getTables(null, null, "CARRE", null);
+			resultSet = databaseMetadata.
+					getTables(null, null, ""
+					+ "CARRE", null);
 			if (resultSet.next()) {
 				state.addBatch("DROP TABLE Carre");
 			}
 			state.addBatch("CREATE TABLE Carre ("
-					+ "noma VARCHAR(255) NOT NULL , " + "ax int NOT NULL , "
-					+ "ay int NOT NULL, " + "cote int NOT NULL, "
+					+ "noma VARCHAR(255) NOT NULL , "
+					+ "ax int NOT NULL , "
+					+ "ay int NOT NULL, "
+					+ "cote int NOT NULL, "
 					+ "PRIMARY KEY (noma))");
 			resultSet = databaseMetadata.getTables(null, null,
 					"TRIANGLE", null);
@@ -73,18 +83,25 @@ public class DerbyConnexion {
 				state.addBatch("DROP TABLE Triangle");
 			}
 			state.addBatch("CREATE TABLE Triangle ("
-					+ "nomt VARCHAR(255) NOT NULL , " + "tx1 int NOT NULL , "
-					+ "ty1 int NOT NULL, " + "tx2 int NOT NULL , "
-					+ "ty2 int NOT NULL, " + "tx3 int NOT NULL , "
-					+ "ty3 int NOT NULL, " + "PRIMARY KEY (nomt))");
-			resultSet = databaseMetadata.getTables(null, null, "RECTANGLE",
-					null);
+					+ "nomt VARCHAR(255) NOT NULL , "
+					+ "tx1 int NOT NULL , "
+					+ "ty1 int NOT NULL, "
+					+ "tx2 int NOT NULL , "
+					+ "ty2 int NOT NULL, "
+					+ "tx3 int NOT NULL , "
+					+ "ty3 int NOT NULL, "
+					+ "PRIMARY KEY (nomt))");
+			resultSet = databaseMetadata.
+					getTables(null, null, ""
+					+ "RECTANGLE", null);
 			if (resultSet.next()) {
 				state.addBatch("DROP TABLE Rectangle");
 			}
 			state.addBatch("CREATE TABLE Rectangle ("
-					+ "nomr VARCHAR(255) NOT NULL , " + "rx int NOT NULL , "
-					+ "ry int NOT NULL, " + "largeur int NOT NULL, "
+					+ "nomr VARCHAR(255) NOT NULL , "
+					+ "rx int NOT NULL , "
+					+ "ry int NOT NULL, "
+					+ "largeur int NOT NULL, "
 					+ "longueur int NOT NULL, "
 					+ "PRIMARY KEY (nomr))");
 			resultSet = databaseMetadata.getTables(null, null, "GROUPEFORME",
@@ -92,10 +109,14 @@ public class DerbyConnexion {
 			if (resultSet.next()) {
 				state.addBatch("DROP TABLE GroupeForme");
 			}
-			state.addBatch("CREATE TABLE GroupeForme( "
-					+ "Name VARCHAR(255) NOT NULL , " + "PRIMARY KEY (Name))");
-			resultSet = databaseMetadata.getTables(null, null, "APPROPRIER",
-						null);
+			state.addBatch("CREATE TABLE "
+					+ "GroupeForme( "
+					+ "Name VARCHAR(255)"
+					+ " NOT NULL , "
+					+ "PRIMARY KEY (Name))");
+			resultSet = databaseMetadata.
+					getTables(null, null, ""
+					+ "APPROPRIER", null);
 			if (resultSet.next()) {
 				state.addBatch("DROP TABLE Approprier");
 			}
@@ -109,10 +130,12 @@ public class DerbyConnexion {
 			int count = 1;
 			for (int i : updateCount) {
 				if (i == Statement.EXECUTE_FAILED) {
-					System.out.println("Error on request " + count +
-							": Execute failed");
+					System.out.println("Error on request "
+							+ "" + count + ":"
+							+ " Execute failed");
 				} else {
-					System.out.println("Request " + count + ": OK");
+					System.out.println("Request "
+							+ "" + count + ": OK");
 				}
 				count++;
 

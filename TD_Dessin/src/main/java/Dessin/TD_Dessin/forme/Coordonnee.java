@@ -1,10 +1,9 @@
 package Dessin.TD_Dessin.forme;
 
 /**
- * implemantation de la classe Coordonnee pour definir la possition d'une forme.
- * 
+ * implemantation de la classe Coordonnee pour definir la
+ * possition d'une forme.
  * @author rachida ouchene.
- * 
  */
 public class Coordonnee {
 	/**
@@ -13,51 +12,49 @@ public class Coordonnee {
 	 * @see Coordonnee#getX().
 	 */
 	private int X;
-	/**
+	/**.
 	 * la possition de point par rapport a l'axe y
-	 * 
 	 * @see Coordonnee#Coordonnee().
 	 * @see Coordonnee#getY().
 	 */
 	private int Y;
 
 	/**
-	 * Constructor Coordonnee qu'inisialise @see X par la possition sur l'axe des X
+	 * Constructor Coordonnee qu'inisialise @see X par la
+	 * possition sur l'axe des X
 	 * . et @see X par la possition sur l'axe des Y .
-	 * 
-	 * @param X: la possition de point par rapport a l'axe x.
-	 * @param Y: la possition de point par rapport a l'axe y.
+	 * @param x : la possition de point par rapport a l'axe x.
+	 * @param y : la possition de point par rapport a l'axe y.
 	 */
-	public Coordonnee(int X, int Y) {
-		this.X = X;
-		this.Y = Y;
+	public Coordonnee(final int x, final int y) {
+		this.X = x;
+		this.Y = y;
 	}
-
-	/**
+	/**.
 	 * Retourn la possition de point par rapport a l'axe x
-	 * 
-	 * @return X.
+	 * @return X .
 	 * @see X
 	 */
-	public int getX() {
+	public final int getX() {
 		return this.X;
 	}
 
-	/**
+	/**.
 	 * Retourn la possition de point par rapport a l'axe Y
-	 * 
-	 * @return Y.
+	 * @return Y .
 	 * @see Y
 	 */
-	public int getY() {
+	public final int getY() {
 		return this.Y;
 	}
 
 	/**
 	 * Deplasse de x et y en rajoutant le deplacement passer en parmetre.
+	 * @param x .
+	 * @param y .
 	 */
-	public void move(int X, int Y) {
-		this.X += X;
-		this.Y += Y;
+	public final void move(final int x, final int y) {
+		this.X += x;
+		this.Y += y;
 	}
 }
